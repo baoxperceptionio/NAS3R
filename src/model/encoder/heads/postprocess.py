@@ -48,10 +48,6 @@ def reg_dense_depth(xyz, mode):
             return xyz  # [-inf, +inf]
         return xyz.clip(min=vmin, max=vmax)
 
-    if mode == 'exp_direct':
-        xyz = xyz.expm1()
-        return xyz.clip(min=vmin, max=vmax)
-
     # distance to origin
     d = xyz.norm(dim=-1, keepdim=True)
     xyz = xyz / d.clip(min=1e-8)
@@ -70,16 +66,6 @@ def reg_dense_depth(xyz, mode):
         #     xyz = torch.cat([xyz[..., :2], depth.unsqueeze(-1)], dim=-1)
         return xyz
 
-    if mode == 'abs_exp':
-        exp_d = d.expm1()
-        if not no_bounds:
-            exp_d = exp_d.clip(min=vmin, max=vmax)
-        xyz = xyz.abs() * exp_d
-        # if not no_bounds:
-        #     # xyz = xyz.clip(min=vmin, max=vmax)
-        #     depth = xyz.clone()[..., 2].clip(min=vmin, max=vmax)
-        #     xyz = torch.cat([xyz[..., :2], depth.unsqueeze(-1)], dim=-1)
-        return xyz
 
     raise ValueError(f'bad {mode=}')
 

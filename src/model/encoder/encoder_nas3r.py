@@ -258,8 +258,6 @@ class EncoderNAS3R(Encoder[EncoderNAS3RCfg]):
             poses = inv_base_context_pose[:, None, :, :] @ poses # [b,1,4,4] @ [b,v,4,4]
 
         return poses
-
-
         
 
     def get_data_shim(self) -> DataShim:

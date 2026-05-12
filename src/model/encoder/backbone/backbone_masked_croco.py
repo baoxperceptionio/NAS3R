@@ -57,7 +57,7 @@ class BackboneMaskedCrocoMultiCfg:
     intrinsics_embed_degree: int = 0
     intrinsics_embed_type: Literal["pixelwise", "linear", "token", "none"] = 'token'  # linear or dpt
     pose_embed_loc: Literal["encoder", "decoder", "none"] = 'none'
-    pose_embed_type: Literal['learnable_token', 'separate_learnable_token'] = 'learnable_token'
+    pose_embed_type: Literal['learnable_token',] = 'learnable_token'
 
 class AsymmetricMaskedCroCoMulti(CroCoNet):
     """ Two siamese encoders, followed by two decoders.
@@ -342,13 +342,6 @@ class AsymmetricMaskedCroCoMulti(CroCoNet):
         if self.pose_embed_loc == 'encoder' and self.pose_embed_type == 'learnable_token':
             pose_embedding = self.pose_token.expand(b, v, *self.pose_token.shape[2:]) 
             pose_embedding_all = rearrange(pose_embedding, "b v ... -> (b v) ...")
-        
-        if self.pose_embed_loc == 'encoder' and self.pose_embed_type == 'separate_learnable_token':
-            first = self.pose_token[:, 0:1].expand(b, 1, *self.pose_token.shape[2:])
-            rest = self.pose_token[:, 1:2].expand(b, v - 1, *self.pose_token.shape[2:])
-            pose_embedding = torch.cat([first, rest], dim=1)
-            # pose_embedding = self.pose_token.expand(b, v, *self.pose_token.shape[2:]) 
-            pose_embedding_all = rearrange(pose_embedding, "b v ... -> (b v) ...")
 
 
         # step 1: encoder input images
@@ -357,7 +350,6 @@ class AsymmetricMaskedCroCoMulti(CroCoNet):
 
 
         feat, pos, P = self._encode_image(images_all, shape_all, intrinsic_embedding_all, pose_embedding=pose_embedding_all) # (bv, n_tokens, 1024)
-        # print("encoder", feat.shape, pos.shape)
         #****************** decoder *******************************
         
         intrinsic_embedding = None
@@ -368,17 +360,9 @@ class AsymmetricMaskedCroCoMulti(CroCoNet):
         if self.pose_embed_loc == 'decoder' and self.pose_embed_type == 'learnable_token':
             pose_embedding = self.pose_token.expand(b, v, *self.pose_token.shape[2:]) 
         
-        if self.pose_embed_loc == 'decoder' and self.pose_embed_type == 'separate_learnable_token':
-            first = self.pose_token[:, 0:1].expand(b, 1, *self.pose_token.shape[2:])
-            rest = self.pose_token[:, 1:2].expand(b, v - 1, *self.pose_token.shape[2:])
-            pose_embedding = torch.cat([first, rest], dim=1)
-            # pose_embedding = self.pose_token.expand(b, v, *self.pose_token.shape[2:]) 
-            # print("first", first.shape, rest.shape, pose_embedding.shape)
-
         feat = rearrange(feat, "(b v) l c -> b v l c", b=b, v=v)
         pos = rearrange(pos, "(b v) l c -> b v l c", b=b, v=v)
 
-        # print("feat1", feat.shape)
         dec_feat = self._decoder(feat, pos.contiguous(), intrinsics_embed=intrinsic_embedding, pose_embedding=pose_embedding, num_target=target_num_views)
 
         pose_feat = None
@@ -387,8 +371,6 @@ class AsymmetricMaskedCroCoMulti(CroCoNet):
 
         dec_feat = list(dec_feat)
         for i in range(len(dec_feat)):
-            # print("dec_feat", dec_feat[i].shape)
-
             if self.pose_embed_loc != 'none' and self.pose_embed_type == 'learnable_token':
                 pose_feat.append(dec_feat[i][:, :, -1:])
 

@@ -75,10 +75,14 @@ Our models are hosted on [Hugging Face](https://huggingface.co/RanranHuang/NAS3R
 
 |                                                    Model name                                                    | Training resolutions | Training data | Training settings |
 |:----------------------------------------------------------------------------------------------------------------:|:--------------------:|:-------------:|:-------------:|
-|                 [re10k_nas3r.ckpt]( https://huggingface.co/RanranHuang/NAS3R/resolve/main/re10k_nas3r.ckpt)                  |        256x256       |     re10k     |  2 views|
-|                 [re10k_nas3r_multiview.ckpt]( https://huggingface.co/RanranHuang/NAS3R/resolve/main/re10k_nas3r_multiview.ckpt)                  |        256x256       |     re10k     | 2-10 views|
-|                 [re10k_nas3r_pretrained.ckpt]( https://huggingface.co/RanranHuang/NAS3R/resolve/main/re10k_nas3r_pretrained.ckpt)                  |        256x256       |     re10k     | 2 views, initialized by VGGT|
-|                 [re10k_nas3r_pretrained-I.ckpt]( https://huggingface.co/RanranHuang/NAS3R/resolve/main/re10k_nas3r_pretrained-I.ckpt)                  |        256x256       |     re10k     | 2 views, initialized by VGGT, incorporate GT intrinsics|
+|                 [re10k_nas3r.ckpt]( https://huggingface.co/RanranHuang/NAS3R/resolve/main/re10k_nas3r.ckpt)                  |        224x224       |     re10k     |  2 views|
+|                 [re10k_nas3r_multiview.ckpt]( https://huggingface.co/RanranHuang/NAS3R/resolve/main/re10k_nas3r_multiview.ckpt)                  |        224x224       |     re10k     | 2-10 views|
+|                 [re10k_nas3r_pretrained.ckpt]( https://huggingface.co/RanranHuang/NAS3R/resolve/main/re10k_nas3r_pretrained.ckpt)                  |        224x224       |     re10k     | 2 views, initialized by VGGT|
+|                 [re10k_nas3r_pretrained-I.ckpt]( https://huggingface.co/RanranHuang/NAS3R/resolve/main/re10k_nas3r_pretrained-I.ckpt)                  |        224x224       |     re10k     | 2 views, initialized by VGGT, incorporate GT intrinsics|
+|                 [re10k_nas3r-m.ckpt]( https://huggingface.co/RanranHuang/NAS3R/resolve/main/re10k_nas3r-m.ckpt)                  |        256x256       |     re10k     |  2 views, MASt3R-style architecture|
+|                 [re10k_nas3r-m_pretrained.ckpt]( https://huggingface.co/RanranHuang/NAS3R/resolve/main/re10k_nas3r-m_pretrained.ckpt)                  |        256x256       |     re10k     |  2 views, initialized by MASt3R|
+|                 [re10k_nas3r-m_pretrained-I.ckpt]( https://huggingface.co/RanranHuang/NAS3R/resolve/main/re10k_nas3r-m_pretrained-I.ckpt)                  |        256x256       |     re10k     |  2 views, initialized by MASt3R, incorporate GT intrinsics|
+
 
 We assume the downloaded weights are located in the `checkpoints` directory.
 
